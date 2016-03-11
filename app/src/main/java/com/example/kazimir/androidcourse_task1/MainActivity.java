@@ -13,9 +13,9 @@ public class MainActivity extends AppCompatActivity {
     public  static  final String PUT_EXTRA_KEY = "sharedValue";
     public static final int REQUEST_ID = 1;
 
-    TextView textViewFirstActivity;
-    EditText editTextForWriteMessage;
-    Button sendMessageButton;
+    TextView firstActivityTextView;
+    EditText firstActivityEditText;
+    Button firstActivityButton;
 
 
     @Override
@@ -23,22 +23,22 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        textViewFirstActivity = (TextView) findViewById(R.id.firstActivityTextView);
-        editTextForWriteMessage = (EditText) findViewById(R.id.firstActivityEditText);
-        sendMessageButton = (Button) findViewById(R.id.firstActivityButton);
+        firstActivityTextView = (TextView) findViewById(R.id.firstActivityTextView);
+        firstActivityEditText = (EditText) findViewById(R.id.firstActivityEditText);
+        firstActivityButton = (Button) findViewById(R.id.firstActivityButton);
 
 
-        sendMessageButton.setOnClickListener(new View.OnClickListener() {
+        firstActivityButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if ((editTextForWriteMessage.getText().toString() != "") & (editTextForWriteMessage.getText() != null)) {
-                    Intent intent = new Intent(MainActivity.this, SecondActivity.class);
-                    intent.putExtra(PUT_EXTRA_KEY, editTextForWriteMessage.getText().toString());
-                    startActivityForResult(intent, REQUEST_ID);
-                }
-                else {
+                if ((firstActivityEditText.getText().toString().equals("")) | (firstActivityEditText.getText().equals(null))) {
                     Toast toast = Toast.makeText(getApplicationContext(), "Enter some text into EditText field!", Toast.LENGTH_SHORT);
                     toast.show();
+                }
+                else {
+                    Intent intent = new Intent(MainActivity.this, SecondActivity.class);
+                    intent.putExtra(PUT_EXTRA_KEY, firstActivityEditText.getText().toString());
+                    startActivityForResult(intent, REQUEST_ID);
                 }
             }
         });
@@ -46,9 +46,11 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent backIntent) {
-        if (requestCode == REQUEST_ID) {
-            String result = getIntent().getExtras().getString(SecondActivity.RESPONSE_KEY);
-            textViewFirstActivity.setText(result);
+        if (resultCode == RESULT_OK) {
+            if (requestCode == REQUEST_ID) {
+                String result = backIntent.getExtras().getString(SecondActivity.RESPONSE_KEY);
+                firstActivityTextView.setText(result);
+            }
         }
     }
 }
